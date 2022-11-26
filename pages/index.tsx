@@ -3,9 +3,17 @@ import moment from "moment";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Match, Player, Team } from "../types/types";
 import { winnerList } from "../winnerList";
+import Lottie from 'react-lottie';
+import trophy from "../public/677-trophy.json"
+import football from "../public/rolling-footbll.json"
+import converter from "number-to-words"
+import { useRouter } from "next/router";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 type Props = {
   players: Player[];
@@ -13,7 +21,11 @@ type Props = {
 };
 
 export default function Home({ players, fixtures }: Props) {
-  const date = moment(new Date()).format("DD MMM YYYY");
+  const router = useRouter();
+  useEffect(() => {
+    const reloadPage = setTimeout(() => router.reload(), 50);
+    clearTimeout(reloadPage);
+  }, []);
 
   return (
     <div>
@@ -25,48 +37,67 @@ export default function Home({ players, fixtures }: Props) {
       <main className="flex divide-x divide-gray-200 2xl:container mx-auto">
         <div className="p-8 space-y-8 w-[1007px]">
           <h1 className="font-qatar-2022-arabic font-bold text-primary-red -tracking-[0.02em] text-3xl border-b border-gray-200 pb-6">
-            Bloopers Worldcup 2022{" "}
+            Bloopers Worldcup 2022
           </h1>
-          <div className="space-y-4">
-            <p className="text-gray-900 font-semibold text-base leading-[22px]">
-              {date}
+          <div className="space-y-4 ">
+            <p className="text-gray-900 font-semibold text-xl leading-[22px] text-center">
+              Today&apos;s Matches
             </p>
-            <div className="grid grid-cols-2 w-max">
+            <div className="grid grid-cols-2 w-max mx-auto">
               {fixtures.map((match, index) => (
                 <MatchCard key={match.id} {...match} index={index} />
               ))}
             </div>
           </div>
           <div className="space-y-2">
-            <p className="bg-primary-red font-qatar-2022-arabic text-white   px-3 h-12 flex items-center rounded-lg -tracking-[0.02em] text-lg font-bold">
+            <p className="bg-primary-red font-qatar-2022-arabic text-white px-3 h-12 flex items-center rounded-lg -tracking-[0.02em] text-xl font-bold">
               Points Table
             </p>
             <div className="px-3 grid grid-cols-2 gap-x-8">
-              {players.map((player, index) => (
-                <PlayerCard index={index + 1} {...player} key={player.id} />
-              ))}
+              <div>
+                {players.slice(0, 13).map((player, index) => (
+                  <PlayerCard
+                    showWinner
+                    index={index + 1}
+                    key={player.id}
+                    {...player}
+                  />
+                ))}
+              </div>
+              <div>
+                {players.slice(13).map((player, index) => (
+                  <PlayerCard index={index + 14} {...player} key={player.id} />
+                ))}
+              </div>
             </div>
           </div>
         </div>
-        <div className="w-[432px] space-y-6">
-          <p className="py-5 px-6 text-gray-900 text-lg font-medium border-b w-full">
+        <div className="w-[432px] space-y-6 p-8">
+          <p className=" font-qatar-2022-arabic font-bold text-primary-red -tracking-[0.02em] text-3xl pb-6 border-b border-gray-200">
             Winners
           </p>
-          <div className="w-[384px] h-[413px] border-[30px] border-[#D9D9D9] rounded-xl mx-6"></div>
-          <div className="divide-y divide-gray-200">
-            {winnerList.map((winner, index) => {
-              const findWinner = players.find(
-                player => player.name === winner.name
-              );
-              return findWinner ? (
-                <PlayerCard
-                  index={index + 1}
-                  showRank={false}
-                  {...findWinner}
-                  key={findWinner.id}
-                />
-              ) : null;
-            })}
+          <Carousel images={winnerList} />
+          <div className="">
+            <div className="px-6">
+              <p className="w-max font-qatar-2022-arabic font-bold text-primary-red -tracking-[0.02em] text-3xl">
+                Match Day
+              </p>
+            </div>
+            <div className="divide-y divide-gray-200">
+              {winnerList.map((winner, index) => {
+                const findWinner = players.find(
+                  player => player.name === winner.name
+                );
+                return findWinner ? (
+                  <PlayerCard
+                    index={winnerList.length - index}
+                    showRank={false}
+                    {...findWinner}
+                    key={findWinner.id}
+                  />
+                ) : null;
+              })}
+            </div>
           </div>
         </div>
       </main>
@@ -88,10 +119,10 @@ const MatchCard = ({
   index,
 }: MatchCardProps) => {
   return (
-    <div className={`flex items-center gap-x-6 ${index % 2 === 0 ? "" : "pl-8 border-l border-gray-200"} ${index > 1 ? "pt-4" : ""}`}>
-      <p className="w-16 whitespace-nowrap italic text-[#6D6D6D]">{moment(datetime).format("h:mm a")}</p>
+    <div className={`flex items-center gap-x-6 ${index % 2 === 0 ? "" : "justify-evenly pl-8 border-l border-gray-200"} ${index > 1 ? "pt-4" : ""}`}>
+      <p className="max-w-16 whitespace-nowrap italic text-[#6D6D6D]">{moment(datetime).format("hh:mm a")}</p>
       <TeamCard {...home_team} />
-      <p className="font-bold text-xl leading-5 w-10">
+      <p className="font-semibold text-xl leading-5 w-10">
         {home_team.goals ?? "-"} : {away_team.goals ?? "-"}
       </p>
       <TeamCard {...away_team} isAway />
@@ -127,13 +158,13 @@ const TeamCard = ({ name, country, isAway = false }: TeamCardProps) => {
   }, [name]);
 
   return (
-    <div className={`flex items-center gap-x-2 ${isAway ? "flex-row-reverse" : "flex-row"}`}>
-      <div className="w-7 h-5 relative">
+    <div className={`flex items-center gap-x-3 ${isAway ? "flex-row-reverse" : "flex-row"}`}>
+      <div className="w-12 h-12 relative">
         <Image
           alt={name}
           layout="fill"
           src={`https://countryflagsapi.com/png/${useName ? name : country}`}
-          className="object-cover rounded-[4px] z-10 ring-1 ring-[#F5F5F5]"
+          className="object-cover rounded-full z-10 ring-1 ring-[#F5F5F5]"
         />
       </div>
       <p className="font-bold leading-[10px]">{country}</p>
@@ -146,21 +177,92 @@ type PlayerCardProps = {
   name: string,
   index: number,
   showRank?: boolean,
+  showWinner?: boolean,
 }
 
-const PlayerCard = ({ index, score, name, showRank = true }: PlayerCardProps) => {
+const PlayerCard = ({ index, score, name, showRank = true, showWinner = false }: PlayerCardProps) => {
+  const trophyOptions = {
+    animationData: trophy,
+    autoplay: true,
+    loop: false,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
+  }
+
+  const footballOptions = {
+    animationData: football,
+    autoplay: false,
+    loop: false,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
+  }
+  
+  
   return (
     <div
       className={`flex items-center justify-between px-6 py-4 text-sm text-gray-500 ${
-        index && index > 2 && showRank ? "border-t border-gray-200" : ""
+        index > 1 && showRank && index !== 14 ? "border-t border-gray-200" : ""
       }`}
     >
-      <div className="flex items-center gap-x-8">
-        {showRank && index ? <p>{index}</p> : null}
-        {!showRank && index ? <p>MD {index}</p> : null}
-        <p className="text-gray-900 font-medium">{name}</p>
+      <div className="flex items-center gap-x-8 capitalize">
+        {!showRank ? (
+          <p className="text-lg w-20">{converter.toWords(index)}</p>
+        ) : (
+          <p className="text-sm rounded-full border w-7 h-7 flex justify-center items-center">{index}</p>
+        )}
+        <div className="relative">
+          <p className="text-gray-900 font-medium text-lg">{name}</p>
+          {showWinner && index === 1 ? (
+            <div className="-inset-y-1 right-10 absolute">
+              <Lottie options={trophyOptions} width={28} height={28} />
+            </div>
+          ) : null}
+        </div>
       </div>
-      <p>{score} Points</p>
+      <div className="flex gap-x-2 items-center">
+        <p className="text-lg">{score}</p>
+        <span>
+          <Lottie options={footballOptions} width={20} height={20} />
+        </span>
+      </div>
+    </div>
+  );
+};
+
+type CarouselTypes = {
+  images: {
+    image_path: string;
+  }[];
+};
+
+const Carousel = ({ images }: CarouselTypes) => {
+  const sliderRef = useRef<Slider | null>(null);
+
+  const settings = {
+    speed: 250,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 1500,
+    infinite: true,
+  };
+  return (
+    <div className="w-full">
+      <Slider ref={sliderRef} {...settings}>
+        {images.map((image, index) => (
+          <div key={`image-${index}`} className="h-[413px] border-[30px] border-[#D9D9D9] rounded-xl relative overflow-hidden">
+             <Image
+              src={image.image_path}
+              priority
+              alt="framer"
+              className="object-cover z-10"
+              layout="fill"
+            />
+          </div>
+        ))}
+      </Slider>
     </div>
   );
 };
