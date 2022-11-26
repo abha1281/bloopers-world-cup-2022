@@ -10,15 +10,20 @@ type Player = {
   trophy: boolean;
 };
 
+type Team = {
+  country: string;
+    goals: number | null;
+    name: string;
+    penalties: number | null;
+}
+
 type Match = {
+  id: number;
   group: string;
   stadium: string;
-  date: string;
-  time: string;
-  teams: {
-    name: string;
-    image: string;
-  }[];
+  datetime: string;
+  away_team: Team;
+  home_team: Team;
 };
 
-export type { Player, Match };
+export type { Player, Team, Match };

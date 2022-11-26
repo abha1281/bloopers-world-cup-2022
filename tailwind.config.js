@@ -8,11 +8,15 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          gray: "#505b73"
+          gray: "#111827",
+          red: "#A6264C"
         }
       },
       fontSize: {
         xs2: ["10px", "12px"],
+      },
+      fontFamily: {
+        "qatar-2022-arabic": ["qatar-2022-arabic"],
       },
     },
   },
