@@ -124,7 +124,7 @@ const MatchCard = ({
   index,
 }: MatchCardProps) => {
   return (
-    <div className={`flex items-center gap-x-6 justify-evenly sm:justify-start ${index % 2 === 0 ? "" : "justify-evenly sm:pl-8 sm:border-l border-gray-200"} ${index > 1 ? "sm:pt-4" : ""}`}>
+    <div className={`flex items-center gap-x-3 sm:gap-x-6 justify-evenly sm:justify-start ${index % 2 === 0 ? "" : "justify-evenly sm:pl-8 sm:border-l border-gray-200"} ${index > 1 ? "sm:pt-4" : ""}`}>
       <p className="max-w-16 whitespace-nowrap italic text-[#6D6D6D]">{moment(datetime).format("hh:mm a")}</p>
       <TeamCard {...home_team} />
       <p className="font-semibold text-xl leading-5 w-10">
