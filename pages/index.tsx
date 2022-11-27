@@ -36,7 +36,7 @@ export default function Home({ players, fixtures }: Props) {
       </Head>
       <main className="flex divide-x divide-gray-200 2xl:container mx-auto">
         <div className="p-8 space-y-8 w-[1007px]">
-          <h1 className="font-qatar-2022-arabic font-bold text-primary-red -tracking-[0.02em] text-3xl border-b border-gray-200 pb-6">
+          <h1 className="font-qatar-2022-arabic font-bold text-primary-red -tracking-[0.02em] text-6xl border-b border-gray-200 pb-6">
             Bloopers Worldcup 2022
           </h1>
           <div className="space-y-4 ">
@@ -78,9 +78,12 @@ export default function Home({ players, fixtures }: Props) {
           </p>
           <Carousel images={winnerList} />
           <div className="">
-            <div className="px-6">
-              <p className="w-max font-qatar-2022-arabic font-bold text-primary-red -tracking-[0.02em] text-3xl">
-                Match Day
+            <div className="flex justify-between">
+              <p className="w-max font-qatar-2022-arabic font-bold text-primary-red -tracking-[0.02em] text-xl">
+                Name
+              </p>
+              <p className="w-max font-qatar-2022-arabic font-bold text-primary-red -tracking-[0.02em] text-xl">
+                Match day
               </p>
             </div>
             <div className="divide-y divide-gray-200">
@@ -202,31 +205,38 @@ const PlayerCard = ({ index, score, name, showRank = true, showWinner = false }:
   
   return (
     <div
-      className={`flex items-center justify-between px-6 py-4 text-sm text-gray-500 ${
-        index > 1 && showRank && index !== 14 ? "border-t border-gray-200" : ""
-      }`}
+      className={`flex items-center justify-between py-4 text-sm text-gray-500 ${
+        index > 1 && showRank && index !== 14 ? "border-t border-gray-200" : "flex-reverse"
+      }
+      ${showRank ? "px-6" : ""}`}
     >
-      <div className="flex items-center gap-x-8 capitalize">
-        {!showRank ? (
-          <p className="text-lg w-20">{converter.toWords(index)}</p>
-        ) : (
-          <p className="text-sm rounded-full border w-7 h-7 flex justify-center items-center">{index}</p>
-        )}
+      <div
+        className={`${
+          showRank ? "" : "justify-between w-full flex-row-reverse"
+        } flex items-center gap-x-8 capitalize`}
+      >
+        <p
+          className={
+            !showRank
+              ? "text-lg"
+              : "text-sm rounded-full border w-7 h-7 flex justify-center items-center"
+          }
+        >
+          {index}
+        </p>
         <div className="relative">
           <p className="text-gray-900 font-medium text-lg">{name}</p>
           {showWinner && index === 1 ? (
-            <div className="-inset-y-1 right-10 absolute">
-              <Lottie options={trophyOptions} width={28} height={28} />
-            </div>
+            <span className="-inset-y-0.5 right-10 text-lg absolute">🏆</span>
           ) : null}
         </div>
       </div>
-      <div className="flex gap-x-2 items-center">
-        <p className="text-lg">{score}</p>
-        <span>
-          <Lottie options={footballOptions} width={20} height={20} />
-        </span>
-      </div>
+      {showRank ? (
+        <div className="flex gap-x-2 items-center">
+          <p className="text-lg">{score}</p>
+          <span className="text-lg">⚽️</span>
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -249,10 +259,10 @@ const Carousel = ({ images }: CarouselTypes) => {
     infinite: true,
   };
   return (
-    <div className="w-full">
+    <div className="w-full h-[413px] border-2 border-primary-red rounded-xl overflow-hidden">
       <Slider ref={sliderRef} {...settings}>
         {images.map((image, index) => (
-          <div key={`image-${index}`} className="h-[413px] border-[30px] border-[#D9D9D9] rounded-xl relative overflow-hidden">
+          <div key={`image-${index}`} className="h-[413px] relative ">
              <Image
               src={image.image_path}
               priority
