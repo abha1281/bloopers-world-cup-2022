@@ -186,25 +186,6 @@ type PlayerCardProps = {
 }
 
 const PlayerCard = ({ index, score, name, showRank = true, showWinner = false }: PlayerCardProps) => {
-  const trophyOptions = {
-    animationData: trophy,
-    autoplay: true,
-    loop: false,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice'
-    }
-  }
-
-  const footballOptions = {
-    animationData: football,
-    autoplay: false,
-    loop: false,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice'
-    }
-  }
-  
-  
   return (
     <div
       className={`flex items-center justify-between py-4 text-sm text-gray-500 ${
@@ -266,7 +247,7 @@ const Carousel = ({ images }: CarouselTypes) => {
     <div className="w-full h-[413px] border-2 border-primary-red rounded-xl overflow-hidden">
       <Slider ref={sliderRef} {...settings}>
         {images.map((image, index) => (
-          <div key={`image-${index}`} className="h-[413px] relative ">
+          <div key={`image-${index}`} className="h-[420px] w-full relative ">
              <Image
               src={image.image_path}
               priority
