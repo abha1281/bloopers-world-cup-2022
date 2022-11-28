@@ -142,33 +142,13 @@ type TeamCardProps = {
 };
 
 const TeamCard = ({ name, country, isAway = false }: TeamCardProps) => {
-  const [useName, setUseName] = useState("");
-
-  const getFlag = async () => {
-    try {
-      const response = await axios.get(
-        `https://countryflagsapi.com/png/${country}`
-      );
-
-      if (response.status === 200) {
-        setUseName(response.data.includes("<!DOCTYPE html>"));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getFlag();
-  }, [name]);
-
   return (
     <div className={`flex items-center gap-x-3 ${isAway ? "flex-row-reverse" : "flex-row"}`}>
-      <div className="w-8 h-8 sm:w-12 sm:h-12 relative">
+      <div className="w-10 h-10 sm:w-16 sm:h-16 relative">
         <Image
           alt={name}
           layout="fill"
-          src={`https://countryflagsapi.com/png/${useName ? name : country}`}
+          src={`/flags/512px/Flag_of_${name}.png`}
           className="object-cover rounded-full z-10 ring-1 ring-[#F5F5F5]"
         />
       </div>
