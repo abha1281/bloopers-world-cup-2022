@@ -20,7 +20,7 @@ export default function Home({ players, fixtures }: Props) {
   useEffect(() => {
     const reloadPage = () => {
       router.reload()
-      setTimeout(reloadPage, 60 * 60 * 5);
+      setTimeout(reloadPage, 300);
   }
   
   reloadPage();
