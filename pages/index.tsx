@@ -218,7 +218,7 @@ const Carousel = ({ images }: CarouselTypes) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 1500,
+    autoplaySpeed: 2500,
     infinite: true,
   };
   return (
