@@ -18,8 +18,12 @@ type Props = {
 export default function Home({ players, fixtures }: Props) {
   const router = useRouter();
   useEffect(() => {
-    const reloadPage = setTimeout(() => router.reload(), 50);
-    clearTimeout(reloadPage);
+    const reloadPage = () => {
+      router.reload()
+      setTimeout(reloadPage, 60 * 60 * 5);
+  }
+  
+  reloadPage();
   }, []);
 
   return (
@@ -31,7 +35,7 @@ export default function Home({ players, fixtures }: Props) {
       </Head>
       <main className="flex sm:flex-row flex-col divide-x divide-gray-200 2xl:container mx-auto">
         <div className="p-8 space-y-8 sm:w-[1007px]">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2 border-b border-gray-200 pb-6 ">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-y-2 sm:gap-3 border-b border-gray-200 pb-6 ">
             <Image src="/svgs/2022_FIFA_World_Cup.svg" alt="cup" height={12} width={50} />
             <h1 className="font-qatar-2022-arabic font-bold text-primary-red -tracking-[0.02em] text-4xl sm:text-6xl sm:text-left text-center">
               Bloopers World Cup 2022
