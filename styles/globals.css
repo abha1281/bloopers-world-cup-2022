@@ -5,17 +5,17 @@
 @font-face {
     font-family: 'qatar-2022-arabic';
     font-weight: 500;
-    src: url(../public/Qatar2022Arabic-Medium.otf) format('opentype');
+    src: url(../public/fonts/Qatar2022Arabic-Medium.otf) format('opentype');
 }
 
 @font-face {
     font-family: 'qatar-2022-arabic';
     font-weight: 700;
-    src: url(../public/Qatar2022Arabic-Bold.ttf) format('truetype');
+    src: url(../public/fonts/Qatar2022Arabic-Bold.ttf) format('truetype');
 }
 
 @font-face {
     font-family: 'qatar-2022-arabic';
     font-weight: 900;
-    src: url(../public/Qatar2022Arabic-Heavy.ttf) format('opentype');
+    src: url(../public/fonts/Qatar2022Arabic-Heavy.ttf) format('opentype');
 }
