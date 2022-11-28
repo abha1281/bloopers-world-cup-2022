@@ -17,13 +17,12 @@ type Props = {
 
 export default function Home({ players, fixtures }: Props) {
   const router = useRouter();
+
   useEffect(() => {
     const reloadPage = () => {
-      // router.reload()
-      setTimeout(reloadPage, 300);
-  }
-  
-  reloadPage();
+      router.reload();
+    };
+    setTimeout(reloadPage, 5 * 60 * 1000);
   }, []);
 
   return (
