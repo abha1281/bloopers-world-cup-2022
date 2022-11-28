@@ -37,7 +37,7 @@ export default function Home({ players, fixtures }: Props) {
       <main className="flex sm:flex-row flex-col divide-x divide-gray-200 2xl:container mx-auto">
         <div className="p-8 space-y-8 sm:w-[1007px]">
           <h1 className="font-qatar-2022-arabic font-bold text-primary-red -tracking-[0.02em] text-4xl sm:text-6xl border-b border-gray-200 pb-6 sm:text-left text-center">
-            Bloopers Worldcup 2022
+            Bloopers World Cup 2022
           </h1>
           <div className="space-y-4 ">
             <p className="text-gray-900 font-semibold text-xl leading-[22px] text-center">
@@ -149,7 +149,7 @@ const TeamCard = ({ name, country, isAway = false }: TeamCardProps) => {
           alt={name}
           layout="fill"
           src={`/flags/512px/Flag_of_${name}.png`}
-          className="object-cover rounded-full z-10 ring-1 ring-[#F5F5F5]"
+          className="object-cover rounded-full z-10 ring-1 ring-[#F5F5F5] shadow-md"
         />
       </div>
       <p className="font-bold leading-[10px] w-8">{country}</p>
