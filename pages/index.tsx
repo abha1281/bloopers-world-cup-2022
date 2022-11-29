@@ -258,10 +258,10 @@ const PlayerCard = ({ index, score, name, showRank = true, showWinner = false, r
 
   return (
     <div
-      className={`flex items-center justify-between py-4 text-sm text-gray-500 ${
+      className={`flex items-center justify-between py-4 text-sm text-gray-500 border-gray-200 ${
         index > 1 && showRank && index !== 14
-          ? "border-t border-gray-200"
-          : "flex-reverse"
+          ? "border-t "
+          : "flex-reverse border-5 sm:border-t-0"
       }
       ${showRank ? "px-6" : ""}`}
     >
