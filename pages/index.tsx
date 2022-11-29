@@ -179,6 +179,10 @@ const MatchCard = ({
       text: "text-orange-400",
       bg: "bg-orange-400"
     },
+    "completed": {
+      text: "text-red-500",
+      bg: "bg-red-500"
+    },
   }
 
   return (
