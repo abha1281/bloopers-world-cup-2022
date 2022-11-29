@@ -2,7 +2,7 @@ import moment from "moment";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Match, Player, Team } from "../types/types";
 import { winnerList } from "../winnerList";
 import { useRouter } from "next/router";
@@ -17,11 +17,36 @@ type Props = {
 
 export default function Home({ players, fixtures }: Props) {
   const router = useRouter();
+  const [rankedPlayers, setRankedPlayers] = useState<Player[]>([])
 
+  const rankPlayers = () => {
+    let scores: number[] = [];
+    players.map(player => {
+      if (!scores.includes(player.score)) {
+        scores.push(player.score);
+      }
+    });
+
+    let newList = scores.map((score, index) => {
+      return players.map(player => {
+        if (player.score === score) {
+          player.rank = index + 1;
+          return player;
+        }
+        return player;
+      });
+    });
+
+    return newList[0];
+  };
+
+  
   useEffect(() => {
     const reloadPage = () => {
       router.reload();
     };
+
+    setRankedPlayers(rankPlayers());
     setTimeout(reloadPage, 5 * 60 * 1000);
   }, []);
 
@@ -35,16 +60,29 @@ export default function Home({ players, fixtures }: Props) {
       <main className="flex sm:flex-row flex-col divide-x divide-gray-200 2xl:container mx-auto">
         <div className="p-8 space-y-8 sm:w-[1007px]">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-y-2 sm:gap-3 border-b border-gray-200 pb-6 ">
-            <Image src="/svgs/2022_FIFA_World_Cup.svg" alt="cup" height={12} width={50} />
+            <Image
+              src="/svgs/2022_FIFA_World_Cup.svg"
+              alt="cup"
+              height={12}
+              width={50}
+            />
             <h1 className="font-qatar-2022-arabic font-bold text-primary-red -tracking-[0.02em] text-4xl sm:text-6xl sm:text-left text-center">
               Bloopers World Cup 2022
             </h1>
           </div>
           <div className="space-y-8">
-            <p className="font-semibold text-xl leading-[22px] text-center font-qatar-2022-arabic text-primary-red">
-              Today&apos;s Matches
-            </p>
-            <div className="grid sm:grid-cols-2 w-max mx-auto sm:gap-0 gap-y-3">
+            <div className="justify-between items-center sm:flex">
+              <p className="font-semibold text-xl leading-[22px] font-qatar-2022-arabic text-center text-primary-red">
+                Today&apos;s Matches
+              </p>
+              <p className="text-gray-400 text-sm text-center">
+                Last updated at{" "}
+                <span className="font-qatar-2022-arabic">
+                  {moment(new Date().getTime()).format("hh:mm a")}
+                </span>
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 w-max mx-auto gap-y-4">
               {fixtures.map((match, index) => (
                 <MatchCard key={match.id} {...match} index={index} />
               ))}
@@ -58,7 +96,7 @@ export default function Home({ players, fixtures }: Props) {
             </div>
             <div className="sm:px-3 grid sm:grid-cols-2 gap-x-8">
               <div>
-                {players.slice(0, 13).map((player, index) => (
+                {rankedPlayers.slice(0, 13).map((player, index) => (
                   <PlayerCard
                     showWinner
                     index={index + 1}
@@ -68,8 +106,13 @@ export default function Home({ players, fixtures }: Props) {
                 ))}
               </div>
               <div>
-                {players.slice(13).map((player, index) => (
-                  <PlayerCard index={index + 14} {...player} key={player.id} />
+                {rankedPlayers.slice(13).map((player, index) => (
+                  <PlayerCard
+                    index={index + 1}
+                    {...player}
+                    key={player.id}
+                    secondList
+                  />
                 ))}
               </div>
             </div>
@@ -91,7 +134,7 @@ export default function Home({ players, fixtures }: Props) {
             </div>
             <div className="divide-y divide-gray-200">
               {winnerList.map((winner, index) => {
-                const findWinner = players.find(
+                const findWinner: Player | undefined = players.find(
                   player => player.name === winner.name
                 );
                 return findWinner ? (
@@ -116,6 +159,7 @@ type MatchCardProps = {
   away_team: Team;
   home_team: Team;
   index: number
+  status: string;
 };
 
 const MatchCard = ({
@@ -123,10 +167,39 @@ const MatchCard = ({
   away_team,
   home_team,
   index,
+  status
 }: MatchCardProps) => {
+
+  const statusLookup = {
+    "in_progress": {
+      text: "text-emerald-500",
+      bg: "bg-emerald-500"
+    },
+    "future_scheduled": {
+      text: "text-orange-400",
+      bg: "bg-orange-400"
+    },
+  }
+
   return (
-    <div>
-        <p className="max-w-16 whitespace-nowrap italic text-[#6D6D6D] text-center">{moment(datetime).format("hh:mm a")}</p>
+    <div className="space-y-2">
+      <div className="flex gap-x-2 text-center justify-center italic">
+        <p className="max-w-16 whitespace-nowrap text-[#6D6D6D] ">
+          {moment(datetime).format("hh:mm a")}
+        </p>
+        <p
+          className={`capitalize ${
+            statusLookup[status as keyof typeof statusLookup].text
+          }`}
+        >
+          {status.split("_").join(" ")}
+        </p>
+        <div
+          className={`w-2 h-2 rounded-full mt-2 ${
+            status === "in_progress" ? "animate-pulse" : ""
+          } ${statusLookup[status as keyof typeof statusLookup].bg}`}
+        />
+      </div>
       <div
         className={`flex items-center gap-x-3 sm:gap-x-6 justify-evenly sm:justify-start ${
           index % 2 === 0
@@ -172,9 +245,17 @@ type PlayerCardProps = {
   index: number,
   showRank?: boolean,
   showWinner?: boolean,
+  rank: number,
+  secondList?: boolean
 }
 
-const PlayerCard = ({ index, score, name, showRank = true, showWinner = false }: PlayerCardProps) => {
+const PlayerCard = ({ index, score, name, showRank = true, showWinner = false, rank, secondList }: PlayerCardProps) => {
+  const borderColors = {
+    1: "border-[#FFD700]",
+    2: "border-[#C0C0C0]",
+    3: "border-[#CD7F32]",
+  }
+
   return (
     <div
       className={`flex items-center justify-between py-4 text-sm text-gray-500 ${
@@ -197,10 +278,10 @@ const PlayerCard = ({ index, score, name, showRank = true, showWinner = false }:
             className={
               !showRank
                 ? "text-lg"
-                : "text-sm rounded-full border w-7 h-7 flex justify-center items-center"
+                : `text-sm rounded-full border-2 w-7 h-7 flex justify-center items-center ${!secondList ? borderColors[index as keyof typeof borderColors] : ""}`
             }
           >
-            {index}
+            {showRank ? rank : index}
           </p>
         </div>
         <p className="text-gray-900 font-medium text-lg">{name}</p>

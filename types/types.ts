@@ -8,6 +8,7 @@ type Player = {
   text_colour: string;
   is_eliminated: boolean;
   trophy: boolean;
+  rank: number
 };
 
 type Team = {
@@ -24,6 +25,7 @@ type Match = {
   datetime: string;
   away_team: Team;
   home_team: Team;
+  status: string;
 };
 
 export type { Player, Team, Match };
