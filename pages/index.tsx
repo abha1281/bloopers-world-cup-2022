@@ -44,7 +44,7 @@ export default function Home({ players, fixtures }: Props) {
             <p className="font-semibold text-xl leading-[22px] text-center font-qatar-2022-arabic text-primary-red">
               Today&apos;s Matches
             </p>
-            <div className="grid sm:grid-cols-2 w-max mx-auto sm:gap-0 gap-y-2">
+            <div className="grid sm:grid-cols-2 w-max mx-auto sm:gap-0 gap-y-3">
               {fixtures.map((match, index) => (
                 <MatchCard key={match.id} {...match} index={index} />
               ))}
@@ -125,13 +125,21 @@ const MatchCard = ({
   index,
 }: MatchCardProps) => {
   return (
-    <div className={`flex items-center gap-x-3 sm:gap-x-6 justify-evenly sm:justify-start ${index % 2 === 0 ? "" : "justify-evenly sm:pl-8 sm:border-l border-gray-200"} ${index > 1 ? "sm:pt-4" : ""}`}>
-      <p className="max-w-16 whitespace-nowrap italic text-[#6D6D6D]">{moment(datetime).format("hh:mm a")}</p>
-      <TeamCard {...home_team} />
-      <p className="font-semibold text-xl leading-5 w-12 text-center whitespace-nowrap">
-        {home_team.goals ?? "-"} : {away_team.goals ?? "-"}
-      </p>
-      <TeamCard {...away_team} isAway />
+    <div>
+        <p className="max-w-16 whitespace-nowrap italic text-[#6D6D6D] text-center">{moment(datetime).format("hh:mm a")}</p>
+      <div
+        className={`flex items-center gap-x-3 sm:gap-x-6 justify-evenly sm:justify-start ${
+          index % 2 === 0
+            ? ""
+            : "justify-evenly sm:pl-8 sm:border-l border-gray-200"
+        } ${index > 1 ? "sm:pt-4" : ""}`}
+      >
+        <TeamCard {...home_team} />
+        <p className="font-semibold text-xl leading-5 w-12 text-center whitespace-nowrap">
+          {home_team.goals ?? "-"} : {away_team.goals ?? "-"}
+        </p>
+        <TeamCard {...away_team} isAway />
+      </div>
     </div>
   );
 };
