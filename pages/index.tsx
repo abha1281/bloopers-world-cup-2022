@@ -233,7 +233,7 @@ const TeamCard = ({ name, country, isAway = false }: TeamCardProps) => {
       <div className="w-10 h-10 sm:w-16 sm:h-16 relative">
         <Image
           alt={name}
-          layout="fill"
+          fill
           src={`/flags/512px/Flag_of_${name}.png`}
           className="object-cover rounded-full z-10 ring-1 ring-[#F5F5F5] shadow-md"
         />
@@ -327,7 +327,7 @@ const Carousel = ({ images }: CarouselTypes) => {
               priority
               alt="framer"
               className="object-cover z-10"
-              layout="fill"
+              fill
             />
           </div>
         ))}
