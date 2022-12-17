@@ -1,4 +1,6 @@
 const winnerList = [
+  { name: "Shariz", image_path: "/winners/shariz-2.jpg" },
+  { name: "Munni", image_path: "/winners/munni-2.jpg" },
   { name: "Angie", image_path: "/winners/angie-1.jpg" },
   { name: "Imma", image_path: "/winners/imma-2.jpg" },
   { name: "Munni", image_path: "/winners/munni-1.jpg" },
